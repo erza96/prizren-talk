@@ -12,7 +12,7 @@ var server = net.createServer(function (stream) {
   })
   stream.pipe(split()).pipe(to(function (buf, enc, next) {
     streams.forEach(function (s) {
-      s.write(buf + '\n')
+      if (s !== stream) s.write(buf + '\n')
     })
     next()
   }))
