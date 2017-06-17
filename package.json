@@ -1,1 +1,13 @@
-{}
+{
+  "dependencies": {
+    "budo": "^10.0.3",
+    "concat-stream": "^1.6.0",
+    "ecstatic": "^2.2.1",
+    "signalhub": "^4.8.0",
+    "split2": "^2.1.1",
+    "through2": "^2.0.3",
+    "to2": "^1.0.0",
+    "webrtc-swarm": "^2.8.0",
+    "websocket-stream": "^5.0.0"
+  }
+}
