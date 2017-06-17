@@ -7,8 +7,13 @@ var split = require('split2')
 
 app.use(function (state, emitter) {
   state.messages = []
+  state.msg = ''
+  emitter.on('send', function (msg) {
+    stream.write(msg + '\n')
+    state.msg = ''
+  })
   stream.pipe(split()).pipe(to(function (buf, enc, next) {
-    state.messages.push(buf.toString())
+    state.messages.unshift(buf.toString())
     emitter.emit('render')
     next()
   }))
@@ -18,16 +23,20 @@ app.route('/', function (state, emit) {
   return html`<body>
     <h1>hi</h1>
     <form onsubmit=${onsubmit}>
-      <input type="text" name="msg">
+      <input onkeydown=${onchange} onchange=${onchange}
+        type="text" name="msg" value=${state.msg} />
       <button type="submit">chat</button>
     </form>
     ${state.messages.map(function (msg) {
       return html`<pre>${msg}</pre>`
     })}
   </body>`
+  function onchange (ev) {
+    state.msg = ev.target.value
+  }
   function onsubmit (ev) {
     ev.preventDefault()
-    stream.write(ev.target.msg.value + '\n')
+    emit('send', ev.target.msg.value)
   }
 })
 app.mount('body')
